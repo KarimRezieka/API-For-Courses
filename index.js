@@ -2,7 +2,7 @@ const express =require('express')
 const {body,validationResult}= require('express-validator')
 const app = express()
 app.use(express.json())
-const courses = [
+let courses = [
     {
         id:1,
         title: "js course",
@@ -70,6 +70,25 @@ app.post('/api/courses',[
     res.status(201).json(courses.push({...req.body}))
 })
 
+//update course 
+app.patch('/api/courses/:courseId',(req,res)=>{
+    let courseId = +req.params.courseId;
+    let course = courses.find((course)=>course.id === courseId);
+    if(!course){
+        return res.status(404).json({msg:"course not found"})
+    }
+
+course = {...course, ...req.body};
+res.status(200).json(course)
+    
+})
+
+//delete course 
+app.delete('/api/courses/:courseId',(req,res)=>{
+    const courseId = +req.params.courseId;
+    courses = courses.filter((course)=> course.id != courseId)
+    res.status(200).json({success: true})
+})
 
 
 app.listen(443,()=>{
