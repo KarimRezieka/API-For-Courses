@@ -1,16 +1,22 @@
-let {courses} = require('../data/courses')
 const {validationResult}= require('express-validator')
+const Course = require('../models/course.model')
 
-const GetAllCourses = (req,res)=>{
+const GetAllCourses = async(req,res)=>{
+    const courses =await Course.find()
     res.json(courses);
 }
 
-const GetCourse = (req,res)=>{
-    const course = courses.find((course)=>course.id == req.params.courseId)
-     if (!course) { 
+const GetCourse =async(req,res)=>{
+    try{
+    const course= await Course.findById(req.params.courseId);
+    if (!course) { 
          return res.status(404).json({msg:"course not fournd"})
      }
     res.json(course)
+    } catch(err){
+        return res.status(400).json({msg:"invalid object ID"})
+    }
+    
  
  }
  const CreateCourseOld =(req,res)=>{
@@ -22,30 +28,29 @@ const GetCourse = (req,res)=>{
     }
     res.status(201).json(courses.push({...req.body}))
  }
- const CreateCourse = (req,res)=>{
+ const CreateCourse = async(req,res)=>{
     const errors = validationResult(req);
     console.log("errors",errors);
     if(!errors.isEmpty()){
         return res.status(400).json(errors.array())
     }
-    res.status(201).json(courses.push({...req.body}))
+    const newCorurse = new Course(req.body);
+    await newCorurse.save();
+    res.status(201).json(newCorurse)
 }
 
-const UpdateCourse = (req,res)=>{
-    let courseId = +req.params.courseId;
-    let course = courses.find((course)=>course.id === courseId);
+const UpdateCourse = async (req,res)=>{
+   const updatedCourse =await Course.findByIdAndUpdate(req.params.courseId,{$set:{...req.body}})
     if(!course){
         return res.status(404).json({msg:"course not found"})
     }
 
-course = {...course, ...req.body};
-res.status(200).json(course)
+return res.status(200).json(updatedCourse)
     
 }
 
-const DeleteCourse = (req,res)=>{
-    const courseId = +req.params.courseId;
-    courses = courses.filter((course)=> course.id != courseId)
+const DeleteCourse = async(req,res)=>{
+const deletecourse = await Course.deleteOne({_id:req.params.courseId});
     res.status(200).json({success: true})
 }
 

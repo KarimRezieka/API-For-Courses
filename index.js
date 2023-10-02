@@ -1,17 +1,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const url =
-'mongodb+srv://karim:11111@coursesdb.fbt3ano.mongodb.net/?retryWrites=true&w=majority;'
+'mongodb+srv://karim:11111@coursesdb.fbt3ano.mongodb.net/COURSESDBB?retryWrites=true&w=majority;'
 let { courses } = require("./data/courses");
 let courseController = require("./controllers/courses-controller");
 const { body, validationResult } = require("express-validator");
 const app = express();
-// mongoose.connect(url).then(()=>{
-//     console.log("connected to db")
-// })
+
 
 mongoose.connect(url).then(() => {
-  console.log("db conn");
+  console.log("server connceted");
 });
 
 app.use(express.json());
