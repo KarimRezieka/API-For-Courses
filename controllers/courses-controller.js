@@ -13,7 +13,6 @@ const GetCourse = (req,res)=>{
     res.json(course)
  
  }
-
  const CreateCourseOld =(req,res)=>{
     if(!req.body.title){
         return res.status(400).json({error:'title not provided'})
