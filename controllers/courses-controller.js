@@ -1,6 +1,7 @@
 const {validationResult}= require('express-validator')
 const httpStatusText = require("../utils/httpStatusText")
 const Course = require('../models/course.model');
+const asyncWrapper = require('../middleware/asyncWrapper')
 const { success } = require('jsend');
 
 const GetAllCourses = async(req,res)=>{
@@ -12,19 +13,21 @@ const GetAllCourses = async(req,res)=>{
     res.json({status:httpStatusText.SUCCESS,data:{courses}});
 }
 
-const GetCourse =async(req,res)=>{
-    try{
+const GetCourse =asyncWrapper(
+    async(req,res)=>{
     const course= await Course.findById(req.params.courseId);
     if (!course) { 
          return res.status(404).json({status:httpStatusText.FAIL,data:{course: null}})
      }
     res.json({status:httpStatusText.SUCCESS,data:{course}})
-    } catch(err){
-        return res.status(400).json({status:httpStatusText.ERROR,data:null,message:"invalid object id "})
-    }
+    // try{
+    // } catch(err){
+    //     return res.status(400).json({status:httpStatusText.ERROR,data:null,message:"invalid object id "})
+    // }
     
  
  }
+ )
  const CreateCourseOld =(req,res)=>{
     if(!req.body.title){
         return res.status(400).json({status:httpStatusText.FAIL,data:{errors:errors.array}})

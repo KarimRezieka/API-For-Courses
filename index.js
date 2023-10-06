@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors")
 const httpStatusText = require('./utils/httpStatusText');
 require('dotenv').config()
 const url = process.env.MONGO_URL 
@@ -14,6 +15,7 @@ mongoose.connect(url).then(() => {
 });
 
 app.use(express.json());
+app.use(cors())
 //get all courses
 app.get("/api/courses", courseController.GetAllCourses);
 //get a single course
