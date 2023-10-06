@@ -1,7 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const url =
-'mongodb+srv://karim:11111@coursesdb.fbt3ano.mongodb.net/COURSESDBB?retryWrites=true&w=majority;'
+const httpStatusText = require('./utils/httpStatusText');
+require('dotenv').config()
+const url = process.env.MONGO_URL 
 let { courses } = require("./data/courses");
 let courseController = require("./controllers/courses-controller");
 const { body, validationResult } = require("express-validator");
@@ -43,6 +44,10 @@ app.patch("/api/courses/:courseId", courseController.UpdateCourse);
 //delete course
 app.delete("/api/courses/:courseId", courseController.DeleteCourse);
 
-app.listen(443, () => {
+app.all('*',(req,res,next)=>{
+return res.status(400).json({status:httpStatusText.ERROR,message:"this resource is not avaliable "})
+})
+
+app.listen(process.env.PORT || 4000, () => {
   console.log("listening on port : 443");
 });
