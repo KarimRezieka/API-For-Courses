@@ -28,15 +28,6 @@ const GetCourse =asyncWrapper(
  
  }
  )
- const CreateCourseOld =(req,res)=>{
-    if(!req.body.title){
-        return res.status(400).json({status:httpStatusText.FAIL,data:{errors:errors.array}})
-    }
-    if(!req.body.price){
-        return res.status(400).json({status:httpStatusText.FAIL,data:{errors:errors.array}})
-    }
-    res.status(201).json(courses.push({...req.body}))
- }
  const CreateCourse = async(req,res)=>{
     const errors = validationResult(req);
     console.log("errors",errors);
@@ -70,3 +61,14 @@ module.exports = {
     UpdateCourse,
     DeleteCourse
 }
+
+
+const CreateCourseOld =(req,res)=>{
+    if(!req.body.title){
+        return res.status(400).json({status:httpStatusText.FAIL,data:{errors:errors.array}})
+    }
+    if(!req.body.price){
+        return res.status(400).json({status:httpStatusText.FAIL,data:{errors:errors.array}})
+    }
+    res.status(201).json(courses.push({...req.body}))
+ }

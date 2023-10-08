@@ -8,7 +8,7 @@ let { courses } = require("./data/courses");
 let courseController = require("./controllers/courses-controller");
 const { body, validationResult } = require("express-validator");
 const app = express();
-
+const usersRouter = require('./routes/users.route')
 
 mongoose.connect(url).then(() => {
   console.log("server connceted");
@@ -16,6 +16,7 @@ mongoose.connect(url).then(() => {
 
 app.use(express.json());
 app.use(cors())
+app.use('/api/users',usersRouter)
 //get all courses
 app.get("/api/courses", courseController.GetAllCourses);
 //get a single course
